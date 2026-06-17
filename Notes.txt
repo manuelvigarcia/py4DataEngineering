@@ -1,0 +1,185 @@
+python -m pip install <package>  # para instalar paquetes faltantes
+
+pip3 install --upgrade pip       # para actualizar pip
+
+
+
+ETL = Extract, Transform and Load
+
+EXTRACT - read .json and .csv files with glob package
+-----
+
+    import glob
+    list_csv=glob.glob('*.csv')
+    # list_csv = ['source1.csv','source2.csv','source3.csv']
+    list_json=glob.glob('*.json')
+    # list_json = ['source1.json','source2.json','source3.json']
+
+Extract data from each file
+    def extract_from_csv(file_to_process):
+        dataframe=pd.read_csv(file_to_process)
+        return dataframe
+
+    df=extract_from_csv('source1.csv')
+
+    def extract_from_json(file_to_process):
+        dataframe=pd.read_json(file_to_process,lines=True)
+        return dataframe
+
+    df=extract_from_json('source1.json')
+
+
+    def extract():
+        # Create an empty data frame to hold extracted data
+        extracted_data = pd.DataFrame(columns=['name','height','weight'])
+
+        #process all csv files
+        for csvfile in glob.glob('*.csv'):
+            extracted_data = extracted_data.append(extract_from_csv(csvfile), ignore_index=True)
+
+        for jsonfile in glob.glob('*.json'):
+            extracted_data=extracted_data.append(extract_from_json(jsonfile),ignore_index=True)
+
+        return extracted_data
+
+    def transform(data):
+        #Convert height from inches to meters
+        data['height']=round(data.height*0.0254,2)
+
+        #Convert pounds to kilograms
+        data['weight']=round(data.weight*0.45359237,2)
+        return data
+
+LOAD
+----
+dump all data into a csv file.
+
+     def load(targetfile,data_to_load):
+         data_to_load.to_csv(targetfile)
+         targetfile='transformed_data.csv'
+         load(targetfile,transfomed_data)
+
+Loging progress
+
+    from datetime import datetime
+    def  log(message):
+        timestamp_format = '%Y-%h-%d-%H:%M:%S'
+        now = datetime.now()
+        timestamp = now.strftime(timestamp_format)
+        with open('logfile.txt','a') as f:
+            f.write(timestamp+',' + message + '\n')
+
+Complete process
+    log('ETL Job started')
+
+    log('Extract phase Started')
+    extracted_data = extract()
+    log('Extract phase ended')
+
+    log('Transform Job Started")
+    transformed_data = transform(extracted_data)
+    log('Transform Job Ended')
+
+    log('Load Job Started')
+    load(targetfile,transformed_data)
+    log('Load Job Ended')
+
+    log('ETL Job ended')
+	
+
+WEB SCRAPPING
+=============
+Requests, httplib, urllib work with the HTTP protocol.
+
+Requests sends HTTP/1.1 requests.
+
+    import requests
+	
+	url = 'http://www.ibm.com/'
+	r=requests.get(url)
+	if (r.status_code==200):
+	    print("server returned OK")
+	else:
+		print(f"Server returned error code {r.status_code}")
+
+	# request headers come as .request.headers attributes,
+	# which is a dictionary accessible by item name
+	r.request.headers['date'] # gets the string 'Thu, 19 Nov 2020 15:21:47 GMT'
+	r.request.headers['Content-Type'] # gets the string 'text/html; charset=UTF-8'
+	
+	r.body # accesses the response body (None for a GET request)
+
+	r.encoding # gets 'UTF-8'
+	r.text # gets the HTML in the body
+
+You can use a URL with parameters to alter the query results.
+You can train against http://httpbin.org with /get&<parameters>
+You can also send data to a service with a POST request with data in the body.
+In a POST request you pass the data in a payload dictionary.
+
+
+    from bs4 import BeautifulSoup
+	
+	html = <página web en html>
+	
+	soup = BeautifulSoup(html, 'html5lib')
+	
+	title = soup.title  # <title>Page Title</title>
+	
+	#first h3 element
+	header=soup.h3   #<h3><b id='bolder'>header text</b></h3>
+	
+	bold_title = header.b # <b id='bolder'>header text</b>
+	bold_title_attributes = bold_title.attrs # {'id':'bolder'}
+	text_title = bold_title.string # 'header text'
+	
+	bold_title.parent # points back at 'header'
+	
+	# we can use .next_sibling to navigate the same level of the html tree
+	
+	# we can filter all elements inside one other element.
+	trows=html.find_all(name='tr') # finds all table rows in the whole page
+	head3=html.find_all(name='h3') # finds all headers level 3 in the page
+	
+	# it returns a list that can be enumerated
+	for i,row in enumerate(trows):
+	    print("row ",i)
+		cells=row.find_all("td")
+		for j, cell in enumerate(cells):
+		    print("clumn ",j," contains ",cell)
+	
+	
+	# to get the page in the first place, we need requests
+	import requests
+	from bs4 import BeautifulSoup
+	
+	url = "http://www.somesite.org. . ."
+	html_page = requests.get(url).text
+	html_tree = BeautifulSoup(html_page, "html.parser")
+	
+	artists = html_tree.find_all('a')
+	for artist in artists:
+	    names=artist.contents[0]
+		full_link=artist.get('href')
+		print(f"{names}: {full_link}")
+		
+
+
+SQLite3 database
+================
+Pandas can interface directly with a SQLite3 database
+import pandas as pd
+import sqlite3
+
+sql_connection=sqlite3.connect('database.db')
+#create a database table from a dataframe
+df.to_sql(table_name,sql_connection,if_exists='fail',index=False)
+
+#overwrite a database table
+df.to_sql(table_name,sql_connection,if_exists='replace',index=False)
+
+#append to a database table
+df.to_sql(table_name,sql_connection,if_exists='append',index=False)
+
+#read from a database table
+df = pandas.read_sql(query_statement, sql_connection)
