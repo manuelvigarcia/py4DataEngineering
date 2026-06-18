@@ -199,7 +199,7 @@ My Practice
 Practice problems for DB with SQLite3
  - [X] Create a new table 'Departments' in db STAFF with headers ['DEPT_ID','DEP_NAME','MANAGER_ID','LOC_ID']
        and the contents from https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMSkillsNetwork-PY0221EN-Coursera/labs/v2/Departments.csv
- - [ ] Append to Departments the data {'DEPT_ID':9,'DEP_NAME':'Quality Assurance','MANAGER_ID':30010,'LOC_ID':'L0010}
+ - [X] Append to Departments the data {'DEPT_ID':9,'DEP_NAME':'Quality Assurance','MANAGER_ID':30010,'LOC_ID':'L0010'}
  - [ ] Query all entries from Departments
  - [ ] Query all Department names
  - [ ] Count the number of Departments
