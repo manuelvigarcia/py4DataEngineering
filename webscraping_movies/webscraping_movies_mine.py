@@ -4,8 +4,8 @@ import pandas as pd
 import sqlite3
 
 url='https://web.archive.org/web/20230902185655/https://en.everybodywiki.com/100_Most_Highly-Ranked_Films'
-columns=["Average Rank","Film", "Year"]#,"Rotten Tomatoes' Top 100[1]"]
-sort_column=columns[0]
+columns=["Film", "Year","Rotten Tomatoes' Top 100[1]"]
+sort_column=columns[2]
 target_file='top_50_films.csv'
 target_db='Movies.db'
 target_table='Top_50'
