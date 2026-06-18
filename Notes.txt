@@ -187,11 +187,20 @@ df = pandas.read_sql(query_statement, sql_connection)
 
 
 
-Practice problems
+Practice problems for web scraping
  - [X] Modify the code to extract Film, Year, Rotten Tomatoes' Top 100 headers
  - [X] Restrict the results to the top 25
  - [X] Filter the output to only print films released after 1999 ended
 My Practice
  - [X] go with "Average Rank" for the top 25 exercise.
  - [X] "Average Rank", 25 movies, from 2000 and up
+ 
+ 
+Practice problems for DB with SQLite3
+ - [ ] Create a new table 'Departments' in db STAFF with headers ['DEPT_ID','DEP_NAME','MANAGER_ID','LOC_ID']
+       and the contents from https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMSkillsNetwork-PY0221EN-Coursera/labs/v2/Departments.csv
+ - [ ] Append to Departments the data {'DEPT_ID':9,'DEP_NAME':'Quality Assurance','MANAGER_ID':30010,'LOC_ID':'L0010}
+ - [ ] Query all entries from Departments
+ - [ ] Query all Department names
+ - [ ] Count the number of Departments
  
