@@ -188,7 +188,7 @@ df = pandas.read_sql(query_statement, sql_connection)
 
 
 Practice problems
- - Modify the code to extract Film, Year, Rotten Tomatoes' Top 100 headers
+ - [X]Modify the code to extract Film, Year, Rotten Tomatoes' Top 100 headers
  - Restrict the results to the top 25
  - Filter the output to only print films released after 1999 ended
  
