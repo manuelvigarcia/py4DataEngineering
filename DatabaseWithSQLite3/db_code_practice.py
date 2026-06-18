@@ -20,5 +20,9 @@ new_data_dict = {
 new_data=pd.DataFrame(new_data_dict)
 new_data.to_sql(table_name,conn,if_exists='append',index=False)
 
+sql_statement = f"SELECT * FROM {table_name}"
+query_output = pd.read_sql(sql_statement,conn)
+print(sql_statement)
+print(query_output)
 
 conn.close()
