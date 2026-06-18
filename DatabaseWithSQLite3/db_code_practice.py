@@ -16,5 +16,9 @@ query_output = pd.read_sql(sql_statement,conn)
 print(sql_statement)
 print(query_output)
 
+sql_statement = f"SELECT count(*) FROM {table_name}"
+query_output = pd.read_sql(sql_statement,conn)
+print(sql_statement)
+print(query_output)
 
 conn.close()

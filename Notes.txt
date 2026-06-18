@@ -202,5 +202,5 @@ Practice problems for DB with SQLite3
  - [X] Append to Departments the data {'DEPT_ID':9,'DEP_NAME':'Quality Assurance','MANAGER_ID':30010,'LOC_ID':'L0010'}
  - [X] Query all entries from Departments
  - [X] Query all Department names
- - [ ] Count the number of Departments
+ - [X] Count the number of Departments
  
