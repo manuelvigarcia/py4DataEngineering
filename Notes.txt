@@ -193,5 +193,5 @@ Practice problems
  - [X] Filter the output to only print films released after 1999 ended
 My Practice
  - [X] go with "Average Rank" for the top 25 exercise.
- - [ ] "Average Rank", 25 movies, from 2000 and up
+ - [X] "Average Rank", 25 movies, from 2000 and up
  
