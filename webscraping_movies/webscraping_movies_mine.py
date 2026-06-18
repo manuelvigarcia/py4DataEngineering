@@ -12,6 +12,7 @@ target_table='Top_50'
 wanted_movies=25
 
 def save_movies_data(data,csv_file,database,db_table):
+    print(data)
     df.to_csv(csv_file)
     sql_connection=sqlite3.connect(database)
     df.to_sql(db_table,sql_connection,if_exists='replace',index=False)
@@ -83,6 +84,8 @@ else:
         else:
             print(f"row {movie.text} did not give any data")
         movie=movie.next_sibling
-    print(columns)
-    print(df)
-    save_movies_data(df.sort_values(sort_column),target_file,target_db,target_table)
+    #Change numer columns to numbers
+    df['Year'] = [int(year) for year in df['Year']]
+    df[sort_column] = [int(year) for year in df[sort_column]]
+    df.sort_values(sort_column,inplace=True,ignore_index=True)
+    save_movies_data(df,target_file,target_db,target_table)
