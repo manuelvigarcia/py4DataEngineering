@@ -9,7 +9,7 @@ sort_column=columns[2]
 target_file='top_50_films.csv'
 target_db='Movies.db'
 target_table='Top_50'
-wanted_movies=50
+wanted_movies=25
 
 def save_movies_data(data,csv_file,database,db_table):
     df.to_csv(csv_file)
