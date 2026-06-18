@@ -16,6 +16,7 @@ def save_movies_data(data,csv_file,database,db_table):
     df.to_csv(csv_file)
     sql_connection=sqlite3.connect(database)
     df.to_sql(db_table,sql_connection,if_exists='replace',index=False)
+    sql_connection.close()
 
 def find_columns_index(table_header,column_names):
     print(f"getting header indices from <{table_header.text}> of type {type(table_header)}")
