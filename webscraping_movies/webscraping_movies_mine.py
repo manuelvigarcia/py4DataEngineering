@@ -87,5 +87,6 @@ else:
     #Change numer columns to numbers
     df['Year'] = [int(year) for year in df['Year']]
     df[sort_column] = [int(year) for year in df[sort_column]]
+    df = df[df['Year']>1999]  # only movies from 2000 and up
     df.sort_values(sort_column,inplace=True,ignore_index=True)
-    save_movies_data(df,target_file,target_db,target_table)
+    save_movies_data(df.sort_values(sort_column),target_file,target_db,target_table)
