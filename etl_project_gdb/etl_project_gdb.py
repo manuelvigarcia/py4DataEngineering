@@ -24,12 +24,11 @@ def scrap_deeper(table_row,column_names,row_indices):
 def extract_country(table_row,column_names,row_indices):
     cells = table_row.find_all('td')
     dict_row={}
-    for i in range(0,len(row_indices)):
-        try:
+    if len(cells)>=8:
+        for i in range(0,len(row_indices)):
             dict_row[column_names[i]]=cells[row_indices[i]].text.strip()
-        except IndexError:
-            print(f'missing data {dict_row}')
-            dict_row = scrap_deeper(table_row,column_names,row_indices)
+    else:
+        dict_row = scrap_deeper(table_row,column_names,row_indices)
     #log_progress(f"Found <{dict_row}>")
     return pd.DataFrame(dict_row,index=[0])
 
