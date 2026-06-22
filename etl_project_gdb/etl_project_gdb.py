@@ -21,14 +21,24 @@ def scrap_deeper(table_row,column_names,row_indices):
     cells = table_row.find_all('td')
     dict_row = {}
     # first element, country name
-    dict_row[column_names[0]]=cells[row_indices[0]]
+    dict_row[column_names[0]]=cells[row_indices[0]].text.strip()
+    print('\n\n')
+    print('\n\n')
+    print(dict_row)
+    print('\n\n')
+    print('\n\n')
     numbers=[]
     for i in range(row_indices[0],len(cells)):  ## rest of the elements
         data = cells[i].text.strip()
         if (not data.startswith('-')):
             numbers.append(data)
     dict_row[column_names[-1]]=numbers[-2]
-    return None
+    print('\n\n')
+    print('\n\n')
+    print(dict_row)
+    print('\n\n')
+    print('\n\n')
+    return dict_row
 
 
 def extract_country(table_row,column_names,row_indices):
