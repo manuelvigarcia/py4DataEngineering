@@ -53,7 +53,7 @@ def load_to_csv(df,csv_path):
 
 def load_to_json(df,json_path):
     log_progress('Writing to json file')
-    df.to_csv(json_path)
+    df.to_json(json_path,orient='records',lines=True)
 
 
 def load_to_db(df,sql_connection,table_name):
@@ -91,7 +91,6 @@ df = extract(url, db_columns, tr_data_idx)
 df = transform(df,db_columns[1])
 load_to_csv(df, csv_file)
 load_to_json(df,json_file)
-print(df)
 conn = sqlite3.connect(db_file)
 load_to_db(df,conn,db_table_name)
 run_query(query_string,conn)
