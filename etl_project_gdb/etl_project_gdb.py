@@ -46,7 +46,7 @@ def extract(url,table_attribs,indices):
 
 def transform(data,column):
     log_progress('Transforming data')
-    data[column] = [int(gdp.replace(',','')) for gdp in data[column]]
+    data[column] = [round(float(gdp.replace(',',''))/1000.0,2) for gdp in data[column]]
     return data.sort_values(by=column,ascending=False)
 
 def load_to_csv(df,csv_path):
@@ -89,3 +89,4 @@ df = extract(url, db_columns, tr_data_idx)
 df = transform(df,db_columns[1])
 load_to_csv(df, csv_file)
 print(df)
+
