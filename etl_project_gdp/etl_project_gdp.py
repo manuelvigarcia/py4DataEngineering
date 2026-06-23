@@ -27,11 +27,9 @@ def extract_country(table_row,column_names,row_indices):
             dict_row[column_names[i]]=cells[row_indices[i]].text.strip()
     else:
         dict_row = scrap_deeper(table_row,column_names,row_indices)
-    #log_progress(f"Found <{dict_row}>")
     return pd.DataFrame(dict_row,index=[0])
 
 def extract(url,table_attribs,indices):
-    log_progress("Fetching data.")
     extracted_data = pd.DataFrame(columns=table_attribs)
     html_page = requests.get(url).text
     data = BeautifulSoup(html_page, 'html.parser')
@@ -40,40 +38,40 @@ def extract(url,table_attribs,indices):
     print(f"found {len(rows)} table rows")
     for row in rows:
         extracted_data = pd.concat([extracted_data,extract_country(row,table_attribs,indices)],ignore_index=True)
+    log_progress("Data extraction complete. Initiating Transformation process.")
     return extracted_data
 
 def transform(data,column):
-    log_progress('Transforming data')
     data[column] = [round(float(gdp.replace(',',''))/1000.0,2) for gdp in data[column]]
+    log_progress("Data transformation complete. Initiating loading process.")
     return data.sort_values(by=column,ascending=False)
 
 def load_to_csv(df,csv_path):
-    log_progress('Writing to csv file')
     df.to_csv(csv_path,index=False)
+    log_progress("Data saved to CSV file.")
 
 def load_to_json(df,json_path):
-    log_progress('Writing to json file')
     df.to_json(json_path,orient='records',lines=True)
+    log_progress("Data saved to JSON file.")
 
 
 def load_to_db(df,sql_connection,table_name):
-    log_progress('Writing to database')
     df.to_sql(table_name,sql_connection,if_exists='replace',index=False)
+    log_progress("Data loaded to Database as table. Running the query.")
 
 def run_query(query_statement, sql_connection):
-    log_progress('Reading database')
     query_output=pd.read_sql(query_statement,sql_connection);
     print(query_statement)
     print(query_output)
+    log_progress('Process Complete.')
 
 
 def log_progress(message):
-    print('>>> ' + message)
     timestamp_format='%Y-%h-%d-%H:%M:%S'
     now = datetime.now()
     timestamp = now.strftime(timestamp_format)
     with open(logfile_txt,'a') as log_file:
-        log_file.write(timestamp +','+ message +'\n')
+        log_file.write(timestamp +' : '+ message +'\n')
 
 
 url = 'https://web.archive.org/web/20230902185326/https://en.wikipedia.org/wiki/List_of_countries_by_GDP_%28nominal%29'
@@ -84,7 +82,8 @@ db_table_name = 'Countries_by_GDP'
 db_file = 'World_Economies.db'
 db_columns=['Country','GDP_USD_billion']
 tr_data_idx=[0,6]
-query_string=f'SELECT * FROM {db_table_name} where {db_columns[1]}>100'
+query_string=f'SELECT * FROM {db_table_name} where {db_columns[1]}>=100'
+log_progress("Preliminaries complete. Initiating ETL process.")
 
 
 df = extract(url, db_columns, tr_data_idx)
@@ -92,6 +91,8 @@ df = transform(df,db_columns[1])
 load_to_csv(df, csv_file)
 load_to_json(df,json_file)
 conn = sqlite3.connect(db_file)
+log_progress("SQL Connection initiated.")
 load_to_db(df,conn,db_table_name)
 run_query(query_string,conn)
-log_progress("Program finished correctly.")
+conn.close()
+log_progress("-")
