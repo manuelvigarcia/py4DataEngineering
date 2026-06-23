@@ -13,9 +13,7 @@ def scrap_deeper(table_row,column_names,row_indices):
     numbers=[]
     for i in range(row_indices[0],len(cells)):  ## rest of the elements
         data = cells[i].text.strip()
-        print(data)
         if not data.startswith('—'):
-            print(f'<{data}>')
             numbers.append(data)
     dict_row[column_names[-1]]=numbers[-2]
     return dict_row
@@ -51,7 +49,7 @@ def transform(data,column):
 
 def load_to_csv(df,csv_path):
     log_progress('Writing to csv file')
-    df.to_csv(csv_path)
+    df.to_csv(csv_path,index=False)
 
 def load_to_json(df,json_path):
     log_progress('Writing to json file')
@@ -60,9 +58,13 @@ def load_to_json(df,json_path):
 
 def load_to_db(df,sql_connection,table_name):
     log_progress('Writing to database')
+    df.to_sql(table_name,sql_connection,if_exists='replace',index=False)
 
 def run_query(query_statement, sql_connection):
     log_progress('Reading database')
+    query_output=pd.read_sql(query_statement,sql_connection);
+    print(query_statement)
+    print(query_output)
 
 
 def log_progress(message):
@@ -82,11 +84,15 @@ db_table_name = 'Countries_by_GDP'
 db_file = 'World_Economies.db'
 db_columns=['Country','GDP_USD_billion']
 tr_data_idx=[0,6]
-query_string='entries with more than a 100 billion USD economy.'
+query_string=f'SELECT * FROM {db_table_name} where {db_columns[1]}>100'
 
 
 df = extract(url, db_columns, tr_data_idx)
 df = transform(df,db_columns[1])
 load_to_csv(df, csv_file)
+load_to_json(df,json_file)
 print(df)
-
+conn = sqlite3.connect(db_file)
+load_to_db(df,conn,db_table_name)
+run_query(query_string,conn)
+log_progress("Program finished correctly.")
