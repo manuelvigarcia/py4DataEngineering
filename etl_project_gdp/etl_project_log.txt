@@ -1,0 +1,7 @@
+2026-Jun-23-03:38:15,Fetching data.
+2026-Jun-23-03:38:17,Transforming data
+2026-Jun-23-03:38:17,Writing to csv file
+2026-Jun-23-03:38:17,Writing to json file
+2026-Jun-23-03:38:17,Writing to database
+2026-Jun-23-03:38:17,Reading database
+2026-Jun-23-03:38:17,Program finished correctly.
