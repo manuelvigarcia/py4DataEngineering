@@ -47,7 +47,7 @@ def extract(url,table_attribs,indices):
 def transform(data,column):
     log_progress('Transforming data')
     data[column] = [int(gdp.replace(',','')) for gdp in data[column]]
-    return data
+    return data.sort_values(by=column,ascending=False)
 
 def load_to_csv(df,csv_path):
     log_progress('Writing to csv file')
@@ -86,7 +86,6 @@ query_string='entries with more than a 100 billion USD economy.'
 
 
 df = extract(url, db_columns, tr_data_idx)
-#df = transform(df,db_columns[1])
+df = transform(df,db_columns[1])
 load_to_csv(df, csv_file)
 print(df)
-
